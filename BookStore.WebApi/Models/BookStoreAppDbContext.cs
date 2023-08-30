@@ -6,10 +6,8 @@ namespace BookStore.WebApi.Models;
 
 public partial class BookStoreAppDbContext : DbContext
 {
-    private readonly IConfiguration _configuration;
-    public BookStoreAppDbContext(IConfiguration configuration)
+    public BookStoreAppDbContext()
     {
-        _configuration = configuration;
     }
 
     public BookStoreAppDbContext(DbContextOptions<BookStoreAppDbContext> options)
@@ -21,9 +19,9 @@ public partial class BookStoreAppDbContext : DbContext
 
     public virtual DbSet<Book> Books { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 
-        => optionsBuilder.UseSqlServer(_configuration.GetConnectionString("DefaultConnection"));
+    //    => optionsBuilder.UseSqlServer(_configuration.GetConnectionString("DefaultConnection"));
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
