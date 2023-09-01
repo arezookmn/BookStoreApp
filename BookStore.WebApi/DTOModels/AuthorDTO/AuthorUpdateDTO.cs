@@ -1,6 +1,6 @@
-﻿namespace BookStore.WebApi.DTOModels
+﻿namespace BookStore.WebApi.DTOModels.AuthorDTO
 {
-    public class AuthorResponseDTO
+    public class AuthorUpdateDTO
     {
         public int Id { get; set; }
 

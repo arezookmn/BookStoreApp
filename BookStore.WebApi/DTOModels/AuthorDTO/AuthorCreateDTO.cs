@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using BookStore.WebApi.Models;
 
-namespace BookStore.WebApi.DTOModels
+namespace BookStore.WebApi.DTOModels.AuthorDTO
 {
     public class AuthorCreateDTO
     {
