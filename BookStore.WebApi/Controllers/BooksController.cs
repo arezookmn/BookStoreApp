@@ -64,6 +64,7 @@ namespace BookStore.WebApi.Controllers
         // PUT: api/Books/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> PutBook(int id, BookUpdateDTO bookUpdateDto)
         {
 
