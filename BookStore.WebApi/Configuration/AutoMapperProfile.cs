@@ -3,7 +3,6 @@ using BookStore.WebApi.Data;
 using BookStore.WebApi.DTOModels.AuthorDTO;
 using BookStore.WebApi.DTOModels.BookDTO;
 using BookStore.WebApi.DTOModels.UserDTO;
-using BookStore.WebApi.Models;
 
 namespace BookStore.WebApi.Configuration
 {

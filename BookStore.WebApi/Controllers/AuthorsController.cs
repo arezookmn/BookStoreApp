@@ -7,8 +7,8 @@ using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using BookStore.WebApi.Models;
 using BookStore.WebApi.DTOModels.AuthorDTO;
+using BookStore.WebApi.Data;
 
 namespace BookStore.WebApi.Controllers
 {

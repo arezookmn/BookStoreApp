@@ -9,8 +9,8 @@ using BookStore.WebApi.DTOModels.BookDTO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using BookStore.WebApi.Models;
 using Microsoft.AspNetCore.Authorization;
+using BookStore.WebApi.Data;
 
 namespace BookStore.WebApi.Controllers
 {

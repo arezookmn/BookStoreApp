@@ -2,7 +2,6 @@ using System.Text;
 using BookStore.WebApi;
 using BookStore.WebApi.Configuration;
 using BookStore.WebApi.Data;
-using BookStore.WebApi.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -60,7 +59,6 @@ builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using BookStore.WebApi.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace BookStore.WebApi.Models;
+namespace BookStore.WebApi.Data;
 
 public partial class BookStoreAppDbContext : IdentityDbContext<ApiUser>
 {
@@ -48,7 +47,7 @@ public partial class BookStoreAppDbContext : IdentityDbContext<ApiUser>
             entity.Property(e => e.Isbn)
                 .HasMaxLength(50)
                 .HasColumnName("ISBN");
-            entity.Property(e => e.Price).HasColumnType("decimal(18, 2)"); 
+            entity.Property(e => e.Price).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.Summery).HasMaxLength(250);
             entity.Property(e => e.Title).HasMaxLength(50);
 
