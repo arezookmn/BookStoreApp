@@ -51,7 +51,12 @@
         }
         catch (ApiException ex)
         {
-            messages = ex.Message;
+            if (ex.StatusCode >= 200 && ex.StatusCode <= 299)
+            {
+                navManager.NavigateTo("/users/login");
+            }
+
+            messages = ex.Response;
         }
 
     }

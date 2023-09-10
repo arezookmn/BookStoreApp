@@ -1,0 +1,15 @@
+﻿@page "/users/logout"
+@using BookStoreApp.Blazor.Server.UI.Services.Authentication
+@inject IAuthenticationService authenticationService
+@inject NavigationManager navigationManager
+<h3>Logout</h3>
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        await authenticationService.Logout();
+
+        navigationManager.NavigateTo("/");
+    }
+
+}
