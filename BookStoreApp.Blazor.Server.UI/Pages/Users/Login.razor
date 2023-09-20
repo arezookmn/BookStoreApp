@@ -41,7 +41,7 @@
         {
             if (ex.StatusCode >= 200 && ex.StatusCode <= 299)
             {
-
+                NavigationManager.NavigateTo("/");
             }
                 message = ex.Response;
         }

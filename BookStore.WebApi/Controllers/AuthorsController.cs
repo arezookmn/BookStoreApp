@@ -4,16 +4,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BookStore.WebApi.DTOModels.AuthorDTO;
 using BookStore.WebApi.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BookStore.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class AuthorsController : ControllerBase
     {
         private readonly BookStoreAppDbContext _context;
@@ -50,7 +53,7 @@ namespace BookStore.WebApi.Controllers
 
         // GET: api/Authors/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<AuthorResponseDTO>> GetAuthor(int id)
+        public async Task<ActionResult<AuthorDetailsDTO>> GetAuthor(int id)
         {
 
             try
@@ -60,7 +63,10 @@ namespace BookStore.WebApi.Controllers
                     return NotFound();
                 }
 
-                var author = await _context.Authors.FindAsync(id);
+                var author = await _context.Authors
+                    .Include(a => a.Books)
+                    .ProjectTo<AuthorDetailsDTO>(_mapper.ConfigurationProvider)
+                    .FirstOrDefaultAsync(a => a.Id == id);
 
                 if (author == null)
                 {
@@ -68,7 +74,7 @@ namespace BookStore.WebApi.Controllers
                     return NotFound();
                 }
 
-                return _mapper.Map<AuthorResponseDTO>(author);
+                return author;
             }
             catch (Exception ex)
             {

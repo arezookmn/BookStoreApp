@@ -1,0 +1,80 @@
+﻿@page "/authors/"
+@inject IAuthorService AuthorService
+@inject IJSRuntime JsRuntime
+<h3>Index</h3>
+@if (response.Success)
+{
+    <div class="alert alert-danger">
+        <h4>@response.Message</h4>
+    </div>
+}
+@if (Model == null)
+{
+    <div class="alert alert-info">
+        <h4>Loading...</h4>
+    </div>
+}
+else
+{
+    <AuthorizeView Roles="Admin">
+        <a class="btn btn-primary" href="/authors/create"><span class="oi oi-plus"></span>Create Author</a>
+    </AuthorizeView>
+
+    <table class="table table-responsive">
+        <thead>
+        <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var author in Model)
+            {
+                <tr>
+                    <td>@author.FirstName</td>
+                    <td>@author.LastName</td>
+                    <td>
+                        <a class="btn btn-primary" href="/authors/details/@author.Id"><span class="oi oi-book" aria-hidden="true"></span>Details</a>
+                        
+                        <AuthorizeView Roles="Admin">
+                            <a class="btn btn-warning" href="/authors/update/@author.Id"><span class="oi oi-pencil" aria-hidden="true"></span>Edit</a>
+                            <button @onclick="@(() => Delete(@author.Id))" class="btn btn-danger"><span class="oi oi-delete" aria-hidden="true"></span>Delete</button>
+                        </AuthorizeView>
+                    </td>
+                </tr>
+            }
+        </tbody>
+
+    </table>
+}
+
+@code {
+
+    private List<AuthorResponseDTO> Model;
+    private Response<List<AuthorResponseDTO>> response = new Response<List<AuthorResponseDTO>>(){Success = true};
+    protected override async Task OnInitializedAsync()
+    {
+         response = await AuthorService.GetAuthors();
+        if (response.Success)
+        {
+            Model = response.Data;
+        }
+    }
+
+    private async Task Delete(int authorId)
+    {
+        var author = Model.First(a => a.Id == authorId);
+        var confirm = await JsRuntime.InvokeAsync<bool>("confirm", $"are you sure to delete this item {author.FirstName} {author.LastName}");
+        if (confirm)
+        {
+            var response = await AuthorService.DeleteAuthor(authorId);
+            if (response.Success)
+            {
+                await OnInitializedAsync(); 
+            }
+        }
+
+    }
+}

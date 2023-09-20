@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Identity.Client;
 
 namespace BookStore.WebApi.Controllers
@@ -63,6 +64,7 @@ namespace BookStore.WebApi.Controllers
 
 
         [HttpPost("login")]
+        [AllowAnonymous]
         public async Task<ActionResult<AuthResponse>> Login(LoginUserDTO userLoginDto)
         {
             try
