@@ -13,6 +13,8 @@
         public int? Year { get; set; }
 
         public string? Image { get; set; }
+        public string? ImageData { get; set; }
+        public string? OriginalImageName { get; set; }
 
         public decimal? Price { get; set; }
 

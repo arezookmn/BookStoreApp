@@ -19,7 +19,8 @@ namespace BookStore.WebApi.DTOModels.BookDTO
         [Range(1800, int.MaxValue)]
         public int? Year { get; set; }
 
-        public string? Image { get; set; }
+        public string? ImageData { get; set; }
+        public string? OriginalImageName { get; set; }
 
         [Required]
         [Range(0,int.MaxValue)]
