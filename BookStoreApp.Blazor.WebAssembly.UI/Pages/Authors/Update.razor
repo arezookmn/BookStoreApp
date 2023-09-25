@@ -1,0 +1,61 @@
+﻿@page "/authors/update/{Id:int}"
+@inject IAuthorService AuthorService
+@inject NavigationManager NavigationManager
+<h3>Edit author</h3>
+
+<EditForm Model="Model" OnValidSubmit="HandleUpdateAuthor">
+    <DataAnnotationsValidator/>
+    <ValidationSummary/>1
+
+    <div class="form-group">
+        <label for="firstName">First Name</label>
+        <InputText class="form-control" id="firstName" @bind-Value="Model.FirstName"/>
+        <ValidationMessage For="@(() => Model.FirstName)"/>
+    </div>
+
+    <div class="form-group">
+        <label for="lastName">Last Name</label>
+        <InputText class="form-control" id="lastName" @bind-Value="Model.LastName"/>
+        <ValidationMessage For="@(() => Model.LastName)"/>
+    </div>
+    
+    <div class="form-group">
+        <label for="bio">Biography</label>
+        <InputText class="form-control" id="bio" @bind-Value="Model.Bio"/>
+        <ValidationMessage For="@(() => Model.Bio)"/>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Update Author</button>
+    <button class="btn btn-outline-secondary" @onclick="BackToList" >Back to list</button>
+</EditForm>
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    private AuthorUpdateDTO Model = new AuthorUpdateDTO();
+
+    private async Task HandleUpdateAuthor()
+    {
+        var authorResponse = await AuthorService.EditAuthor(Id,Model);
+        if (authorResponse.Success)
+        {
+            BackToList();
+        }
+    }
+
+    private void BackToList()
+    {
+        NavigationManager.NavigateTo("/authors/");
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var response = await AuthorService.GetAuthorForUpdate(Id);
+        if (response.Success)
+        {
+            Model = response.Data;
+        }
+    }
+
+}

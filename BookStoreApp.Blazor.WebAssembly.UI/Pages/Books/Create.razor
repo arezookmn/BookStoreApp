@@ -1,0 +1,125 @@
+﻿@page "/books/create"
+@using Microsoft.AspNetCore.Components
+@inject IBookService BookService
+@inject IAuthorService AuthorService
+@inject NavigationManager NavigationManager
+@* @attribute [Authorize(Roles = "Admin")]
+ *@
+<h3>Create</h3>
+
+<EditForm Model="Book" OnValidSubmit="HandleBookCreate">
+    <DataAnnotationsValidator/>
+    <ValidationSummary/>
+    
+    <div class="form-group">
+        <label for="title">Book Title</label>
+        <InputText @bind-Value="Book.Title" class="form-control" id="title"></InputText>
+    </div>
+    
+    <div class="form-group">
+        <label for="isbn">Book ISBN</label>
+        <InputText @bind-Value="Book.Isbn" class="form-control" id="isdn"></InputText>
+    </div>
+
+    <div class="form-group">
+        <label for="price">Book Price</label>
+        <InputNumber @bind-Value="Book.Price" class="form-control" id="price"></InputNumber>
+    </div>
+
+    <div class="form-group">
+        <label for="year">Book Year</label>
+        <InputNumber @bind-Value="Book.Year" class="form-control" id="year"></InputNumber>
+    </div>
+
+    <div class="form-group">
+        <label for="summery">Book Summery</label>
+        <InputTextArea @bind-Value="Book.Summery" class="form-control" id="summery"></InputTextArea>
+    </div>
+    
+    <div class="form-group">
+        <label for="author">Book Author</label>
+        <InputSelect @bind-Value="Book.AuthorId" class="form-control" id="author">
+            <option value=""> --- Select Author --- </option>
+            @foreach(AuthorResponseDTO author in Authors)
+            {
+                <option value="@author.Id">@author.FirstName @author.LastName</option>
+            }
+        </InputSelect>
+    </div>
+    
+    <div class="form-group">
+        <label for="image">Book Covers Photo</label>
+        <div>
+            <InputFile OnChange="HandleFileSelection"/>
+            <img src="@img" width="100" height="100" class="img-thumbnail"/>
+            <p class="text-danger">@UploadFileWarning</p>
+        </div>
+    </div>
+    
+    <button type="submit" class="btn btn-primary">Create Book</button>
+
+</EditForm>
+
+
+@code {
+
+    private BookCreateDTO Book = new BookCreateDTO();
+    private List<AuthorResponseDTO> Authors = new List<AuthorResponseDTO>();
+    private string UploadFileWarning = String.Empty;
+    private string img = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Response<List<AuthorResponseDTO>> response = await AuthorService.GetAuthors();
+        if (response.Success)
+        {
+            Authors = response.Data;
+        }
+
+    }
+
+    private async Task HandleBookCreate()
+    {
+
+        var authorResponse = await BookService.CreateBook(Book);
+        if (authorResponse.Success)
+        {
+            BackToList();
+        }
+    }
+
+    private void BackToList()
+    {
+        NavigationManager.NavigateTo("/books/");
+    }
+
+    private async Task HandleFileSelection(InputFileChangeEventArgs e)
+    {
+        var file = e.File;
+
+        if (file != null)
+        {
+            var extention = System.IO.Path.GetExtension(file.Name);
+
+            if (extention.ToLower().Contains("jpg") ||
+                extention.ToLower().Contains("png") ||
+                extention.ToLower().Contains("jpeg"))
+            {
+                var byteArray = new byte[file.Size];
+                var bytes = await file.OpenReadStream().ReadAsync(byteArray);
+
+                string imageType = file.ContentType;
+                string stringBase64Img = Convert.ToBase64String(byteArray);
+
+                Book.ImageData = stringBase64Img;
+                Book.OriginalImageName = file.Name;
+                img = $"data:{imageType}; base64, {stringBase64Img}";
+            }
+            else
+            {
+                UploadFileWarning = "this format is not supported, select jpg or png file!";
+            }
+        }                       
+    }
+}
+ 
